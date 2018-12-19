@@ -116,7 +116,7 @@ if __name__ == "__main__":
 	
 	# SEND THE ENCRYPTION ALGORITHM
 
-	algo_file = "/home/fanny/Documents/Workspace/Network-Security-Project-Fall-2018-master/file_to_send/encrypt.py"
+	algo_file = "encrypt.py"
 	
 	algo_hex_str = convert_file_to_hex_string(algo_file)
 	algo_list_pos_data = hex_to_list_pos_data(algo_hex_str)
@@ -125,7 +125,7 @@ if __name__ == "__main__":
 
 	# SEND THE ACTUAL FILE (WITH ENCRYPTED CONTENT)
 
-	data_file = "/home/fanny/Documents/Workspace/Network-Security-Project-Fall-2018-master/file_to_send/secret_archive.zip"
+	data_file = "secret_archive.zip"
 	
 	data_hex_str = convert_file_to_hex_string(data_file)
 	list_pos_data = hex_to_list_pos_data(data_hex_str)
