@@ -1,0 +1,1 @@
+tshark -Y http.request -n -r traffic_dump_filtered.pcap -T fields -e http.request.full_uri -e http.user_agent | grep 'type=data' | grep -e 'pos=[0-9]*' -e 'Gecko/[0-9a-f]*' -o | paste - - | grep -oP 'pos=\K.*' | sort -n  | grep -oP '[0-9 ]*Gecko/\K.*' | tr -d '\n' > hex_str
